@@ -13,4 +13,4 @@ var courseSchema = Schema( {
     originalURL: String,
 } );
 
-module.exports = mongoose.model( 'Course', courseSchema );
+module.exports = mongoose.model( 'Recipe', recipeSchema );
