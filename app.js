@@ -23,7 +23,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 const ToDoItem = require("./models/ToDoItem")
 const Course = require('./models/Course')
 const Schedule = require('./models/Schedule')
-const Ingredient = require('./models/Ingredient')
+const recipe = require('./models/Recipe')
 
 // *********************************************************** //
 //  Loading JSON datasets
