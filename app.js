@@ -23,7 +23,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 const ToDoItem = require("./models/ToDoItem")
 const Course = require('./models/Course')
 const Schedule = require('./models/Schedule')
-const recipe = require('./models/Recipe')
+const Recipe = require('./models/Recipe')
 
 // *********************************************************** //
 //  Loading JSON datasets
@@ -304,16 +304,30 @@ app.get('/upsertDB',
   }
 )
 
-app.post('/recipes/byIng',
+app.get('/courses/byName/:name',
+  // show a list of all courses taught by a given faculty
+  async (req,res,next) => {
+    let name = req.params.name;
+    const recipes = 
+       await Recipe
+         .find({name:{$regex : "son"}})
+    //res.json(courses)
+    res.locals.recipes = recipes
+    res.render('recipelist')
+  } 
+)
+
+app.post('/recipes/byName',
   // show list of courses in a given subject
   async (req,res,next) => {
-    const {ing} = req.body;
-    const recipes = await Recipe.find({Ingredient:ing})
-    
+    const {name} = req.body;
+    const recipes = await Recipe.find({name:{$regex : "son"}})
     res.locals.recipes = recipes
     res.render('recipelist')
   }
 )
+
+
 
 app.get('/courses/bySubject/:subject',
   // show list of courses in a given subject
