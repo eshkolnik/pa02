@@ -38,8 +38,7 @@ const courses = courses2122
 
 const mongoose = require( 'mongoose' );
 
-//const mongodb_URI = process.env.mongodb_URI
-const mongodb_URI = 'mongodb+srv://eshkolnik1:Motocar2001$hai@cluster0.hqfpf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const mongodb_URI = process.env.mongodb_URI
 //const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
 
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
