@@ -23,6 +23,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 const ToDoItem = require("./models/ToDoItem")
 const Course = require('./models/Course')
 const Schedule = require('./models/Schedule')
+const Ingredient = require('./models/Ingredient')
 
 // *********************************************************** //
 //  Loading JSON datasets
@@ -299,6 +300,29 @@ app.get('/upsertDB',
   }
 )
 
+app.post('/recipes/byIng',
+  // show list of courses in a given subject
+  async (req,res,next) => {
+    const {ing} = req.body;
+    const recipes = await Recipe.find({Ingredient:ing})
+    
+    res.locals.recipes = recipes
+    res.render('recipelist')
+  }
+)
+
+app.get('/courses/bySubject/:subject',
+  // show list of courses in a given subject
+  async (req,res,next) => {
+    const {subject} = req.params;
+    const courses = await Course.find({subject:subject,independent_study:false}).sort({term:1,num:1,section:1})
+    
+    res.locals.courses = courses
+    res.locals.times2str = times2str
+    //res.json(courses)
+    res.render('courselist')
+  }
+)
 
 app.post('/courses/bySubject',
   // show list of courses in a given subject
