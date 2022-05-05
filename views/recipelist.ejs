@@ -7,10 +7,11 @@ Here we want a ul list with the ingredient, name, ingredients, steps, timers, or
             <th>name</th>
         </tr>
     </thead>
-    <tbody>
-        <% for (recipe of recipes) {
-            const main = recipe.name;
-             %>
-    </tbody>
+    <tbody></tbody>
+    <% for (recipe of recipes) { %>
+        <tr class="mb-2"> 
+            <td><%= recipe.name %></td>
+        </tr>
+        <% }%>
 </table>
 

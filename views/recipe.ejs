@@ -1,11 +1,49 @@
-<div class="jumbotron">
-    <h1>Recipe Finder</h1>
-    <p></p>
+<div class="bg-light border border-primary p-3 rounded m-3">
+    <h1 class="display-4 text-center">Recipe List</h1>
+    <p class="lead text-center"><%= recipes.length %>  recipes for <%= user['username'] %> to make</p>
 </div>
-
-<form method="post" action="/recipes/byIng">
-    Show Recipes by Ingredient: 
-      <input type="text" name="subject" 
-             placeholder="e.g. Chicken">
-    <input type="submit">
+<hr>
+<ol>
+    <% for (recipe of recipes){%>
+        <li class="mb-2">          
+            <b><%= recipe.name%>: </b>
+            <br>
+            <ul>
+                <% for (i of recipe.ingredients.split(",")) {%>
+                <li> <%= i%></li>
+                <% }%>
+            </ul>
+            <br>
+            <ol>
+                <% for (i of recipe.instructions.split("  ")) {%>
+                <li> <%= i%></li>
+                <% }%>
+            </ol>
+            <br>
+            <%= recipe.createdAt %> 
+            <a href="/recipe/delete/<%= recipe._id%>">(delete)</a>
+        </li>
+    <% }%>
+</ol>
+<hr>
+<form method="post" action="/recipe/add">
+    <table>
+        <tr>
+        <td>name</td>
+        <td><input type="text" name="name" ></td>
+        </tr>
+        <tr>
+        <td>ingredients</td>
+        <td><input type="text" name="ingredients"></td>
+        </tr>
+        <tr>
+        <td>instructions</td>
+        <td><input type="text" name="instructions"></td>
+        </tr>
+        <tr>
+        <td colspan="2"><input type="submit" value="Save Item" ></td>
+        </tr>
+    </table>
 </form>
+
+

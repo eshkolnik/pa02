@@ -38,7 +38,8 @@ const courses = courses2122
 
 const mongoose = require( 'mongoose' );
 
-const mongodb_URI = process.env.mongodb_URI
+//const mongodb_URI = process.env.mongodb_URI
+const mongodb_URI = 'mongodb+srv://eshkolnik1:Motocar2001$hai@cluster0.hqfpf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 //const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
 
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
@@ -137,9 +138,6 @@ app.get("/", (req, res, next) => {
   res.render("index");
 });
 
-app.get("/recipe", (req, res, next) => {
-  res.render("recipe");
-});
 
 app.get("/about", (req, res, next) => {
   res.render("about");
@@ -169,6 +167,53 @@ app.get("/demo",
     next(e);
   }
 })
+
+/*
+    Recipe routes
+*/
+app.get('/recipe',
+  isLoggedIn,   // redirect to /login if user is not logged in
+  async (req,res,next) => {
+    try{
+      let userId = res.locals.user._id;  // get the user's id
+      let recipes = await Recipe.find({userId:userId}); // lookup the user's todo items
+      res.locals.recipes = recipes;  //make the items available in the view
+      res.render("recipe");  // render to the toDo page
+    } catch (e){
+      next(e);
+    }
+  }
+  )
+
+  app.post('/recipe/add',
+  isLoggedIn,
+  async (req,res,next) => {
+    try{
+      const {name,ingredients,instructions} = req.body; 
+      const userId = res.locals.user._id; 
+      const createdAt = new Date(); 
+      let data = {name,ingredients,instructions, userId, createdAt,} 
+      let recipe = new Recipe(data) 
+      await recipe.save() 
+      res.redirect('/recipe')  
+    } catch (e){
+      next(e);
+    }
+  }
+  )
+
+  app.get("/recipe/delete/:recipeId",
+    isLoggedIn,
+    async (req,res,next) => {
+      try{
+        const recipeId=req.params.recipeId; // get the id of the recipe to delete
+        await Recipe.deleteOne({_id:recipeId}) 
+        res.redirect('/recipe') 
+      } catch (e){
+        next(e);
+      }
+    }
+  )
 
 
 /*
@@ -304,43 +349,6 @@ app.get('/upsertDB',
   }
 )
 
-app.get('/recipes/byName/:name',
-  // show a list of all courses taught by a given faculty
-  async (req,res,next) => {
-    let name = req.params.name;
-    const recipes = 
-       await Recipe
-         .find({name:{$regex : name}})
-    //res.json(courses)
-    res.locals.recipes = recipes
-    res.render('recipelist')
-  } 
-)
-
-app.post('/recipes/byName',
-  // show list of courses in a given subject
-  async (req,res,next) => {
-    const {name} = req.body;
-    const recipes = await Recipe.find({name:{$regex : name}})
-    res.locals.recipes = recipes
-    res.render('recipelist')
-  }
-)
-
-
-
-app.get('/courses/bySubject/:subject',
-  // show list of courses in a given subject
-  async (req,res,next) => {
-    const {subject} = req.params;
-    const courses = await Course.find({subject:subject,independent_study:false}).sort({term:1,num:1,section:1})
-    
-    res.locals.courses = courses
-    res.locals.times2str = times2str
-    //res.json(courses)
-    res.render('courselist')
-  }
-)
 
 app.post('/courses/bySubject',
   // show list of courses in a given subject
