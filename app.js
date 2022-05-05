@@ -137,6 +137,10 @@ app.get("/", (req, res, next) => {
   res.render("index");
 });
 
+app.get("/recipe", (req, res, next) => {
+  res.render("recipe");
+});
+
 app.get("/about", (req, res, next) => {
   res.render("about");
 });
