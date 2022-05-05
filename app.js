@@ -304,13 +304,13 @@ app.get('/upsertDB',
   }
 )
 
-app.get('/courses/byName/:name',
+app.get('/recipes/byName/:name',
   // show a list of all courses taught by a given faculty
   async (req,res,next) => {
     let name = req.params.name;
     const recipes = 
        await Recipe
-         .find({name:{$regex : "son"}})
+         .find({name:{$regex : name}})
     //res.json(courses)
     res.locals.recipes = recipes
     res.render('recipelist')
@@ -321,7 +321,7 @@ app.post('/recipes/byName',
   // show list of courses in a given subject
   async (req,res,next) => {
     const {name} = req.body;
-    const recipes = await Recipe.find({name:{$regex : "son"}})
+    const recipes = await Recipe.find({name:{$regex : name}})
     res.locals.recipes = recipes
     res.render('recipelist')
   }
